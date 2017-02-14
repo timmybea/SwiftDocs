@@ -219,8 +219,8 @@ default:
 
 
 //CONTINUE
-//Causes one loop iteration to end immediately and begin the next loop. Notice that it does not break out of the loop though. Without the continue keyword in this example, the compiler would have to check every vowel in the array before continuing. This keyword means can save several operations in each loop.
-//In this example, vowels are being removed from the input text.
+//Causes one loop iteration to end immediately and begin the next loop. Notice that it does not break out of the loop though.
+//In this example, vowels are being removed from the input text. If the vowels arrray contains the character we want to leap ahead to the beginning of the next loop.
 
 var inputText = "Great minds think alike"
 var outputText = ""
@@ -262,7 +262,21 @@ if let number = possibleNumber {
     print("I don't recognise that symbol")
 }
 
-let greets = "hello"
+//FALLTHROUGH
+//In a C switch you have to put a break in every case to avoid falling through to the next case. However, in Swift a break is the default behavior. However, if you would like fallthrough, you must explicitly call for it.
+
+let numberToDescribe = 7
+var description = "The number \(numberToDescribe) is "
+
+switch numberToDescribe {
+case 2, 3, 5, 7, 11, 13, 17, 19:
+    description += "a prime number and "
+    fallthrough
+default:
+    description += "an integer"
+}
+
+//Without this fallthrough command you could only ever have one addition to the descrition. This allows for two.
 
 
 
