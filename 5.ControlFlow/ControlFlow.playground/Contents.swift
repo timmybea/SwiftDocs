@@ -262,5 +262,7 @@ if let number = possibleNumber {
     print("I don't recognise that symbol")
 }
 
+let greets = "hello"
+
 
 
