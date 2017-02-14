@@ -278,5 +278,33 @@ default:
 
 //Without this fallthrough command you could only ever have one addition to the descrition. This allows for two.
 
+//LABELED STATEMENTS
+//Because you can have nested loops, and conditionals, you can easily end up with complex looping behavior. This can make it hard to be precise about which loop you want your control transfer statement to apply to. Perhaps you want the break or fallthrough to apply to the parent loop as opposed to the loop that you are executing the line on. To combat this we can use labeled statements. Here is the snakes and ladders game again, this time with a 'gameLoop' label which is necessary because the while loop contains a switch.
+//In this version of the game, the player must land exactly on the final square to win.
+
+
+square = 0
+diceRoll = 0
+
+gameLoop: while square != finalSquare {
+    
+    diceRoll += 1
+    
+    if diceRoll == 7 { diceRoll = 1 }
+    
+    switch square + diceRoll {
+    case finalSquare:
+        // is equal to final square so break out of the while loop (not the switch)
+        break gameLoop
+    case let newSquare where newSquare > finalSquare:
+        //The player has rolled past the final square, so don't move and iterate through the gameLoop again (not the switch)
+        continue gameLoop
+    default:
+        square += diceRoll
+        square += board[square]
+    }
+}
+print("You win!")
+
 
 
