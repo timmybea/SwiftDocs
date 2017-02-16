@@ -307,4 +307,31 @@ gameLoop: while square != finalSquare {
 print("You win!")
 
 
+//GUARD Command
+//Guard is like a condition except it must always have an else statement with it
+
+
+func greet(person: [String: String]) {
+    
+    guard let thisName = person["name"] else { return }
+    
+    print("Hello, \(thisName)")
+    
+    guard let location = person["location"] else {
+        print("I hope the weather is nice wherever you are")
+        return
+    }
+    
+    print("I hope the weather is nice in \(location)")
+    
+}
+
+greet(person: ["name": "John"])
+// Prints "Hello John!"
+// Prints "I hope the weather is nice near you."
+greet(person: ["name": "Jane", "location": "Cupertino"])
+// Prints "Hello Jane!"
+// Prints "I hope the weather is nice in Cupertino."
+
+
 
