@@ -33,3 +33,36 @@ func greetFirstTime(name: String, firstTime: Bool) -> String {
 
 greetFirstTime(name: "Holly", firstTime: true)
 
+
+//Function with no inputs or output
+
+func printGreetWorld() {
+    print("Hello, World")
+}
+
+printGreetWorld()
+
+
+//Functions with multiple outputs (using tuples)
+
+func findMinMaxIn(array: [Int]) -> (min: Int, max: Int) {
+    
+    var min: Int = array[0]
+    var max: Int = array[0]
+    
+    for value in array {
+        if value < min {
+            min = value
+        } else if value > max {
+            max = value
+        }
+    }
+    return (min, max)
+}
+
+let answer = findMinMaxIn(array: [4, 8, 12, 3, 9, 1])
+answer.min
+answer.max
+
+
+
