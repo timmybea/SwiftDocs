@@ -189,5 +189,69 @@ arithmeticFunction = multiplyTwoInts
 
 arithmeticFunction(6, 3)
 
+//You can also pass functions as input parameters
+func printMathFunction(_ mathFunction: (Int, Int) -> Int, _ a: Int, _ b: Int) {
+    print(mathFunction(a, b))
+}
+
+printMathFunction(arithmeticFunction, 6, 3)
+
+arithmeticFunction = addTwoInts
+
+printMathFunction(arithmeticFunction, 6, 3)
+
+
+//Example of changing input output value types
+
+
+//two functions of type: (Int) -> Int
+
+func stepForward(_ input: Int) -> Int {
+    return input + 1
+}
+
+func stepBackward(_ input: Int) -> Int {
+    return input - 1
+}
+
+//A function of type: (Bool) -> (Int) -> Int returns one of the two previous functions.
+
+func chooseStepFunction(backward: Bool) -> (Int) -> Int {
+    return backward ? stepBackward : stepForward
+}
+
+//change to (Int) -> Int in a function
+func stepTowardZero(_ input: Int) -> Int {
+    if input != 0 {
+        let function = chooseStepFunction(backward: input > 0)
+        return function(input)
+    } else {
+        return 0
+    }
+}
+
+var startingNumber = 6
+
+print("Let count commence")
+while startingNumber != 0 {
+    print("\(startingNumber)...")
+    startingNumber = stepTowardZero(startingNumber)
+}
+print("ZERO!")
+
+
+//Another (simplified) way using reassignment
+
+var startInt = 5
+let progressTowardZero = chooseStepFunction(backward: startInt > 0)
+
+print("Let count commance")
+while startInt != 0 {
+    print("\(startInt)...")
+    startInt = progressTowardZero(startInt)
+}
+print("ZERO")
+
+
 
 
