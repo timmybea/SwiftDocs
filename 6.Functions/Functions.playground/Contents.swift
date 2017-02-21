@@ -112,3 +112,82 @@ func stateMyAge(_ age: Int) -> String {
 stateMyAge(34)
 
 
+
+//Function with default parameter
+func someFunction(regularParameter: Int, parameterWithDefault: Int = 12) -> String {
+    return "the result is \(regularParameter + parameterWithDefault)"
+}
+
+someFunction(regularParameter: 5)
+someFunction(regularParameter: 5, parameterWithDefault: 7)
+
+
+//Function with variadic parameters:
+//In this case, we don't know how many parameters are going to be entered. It could be zero or many. Only one variadic parameter is permitted in a single function.
+//Note that the underscore means that the word 'numbers' does not need to be included in the function call.
+
+func arithmeticMean(_ numbers:Double...) -> Double {
+    var total: Double = 0
+    for number in numbers {
+        total += number
+    }
+    return total / Double(numbers.count)
+}
+
+
+arithmeticMean(5, 10, 10)
+
+//In-Out Parameters
+//Normally, you cannot alter the value of a parameter in a function. This is because it is passed by value (a copy). By using the inout keyword before the data type, you can create a pointer to the reference. Note that when you call the function the ampersand is necessary.
+//You can only do this with var datatypes (not let)
+//You cannot give default values to the parameters
+
+func swapTwoInts(_ a: inout Int, _ b: inout Int) {
+    
+    let tempA = a
+    a = b
+    b = tempA
+}
+
+
+var intA = 6
+var intB = 12
+
+swap(&intA, &intB)
+
+intA
+intB
+
+//Function types
+//All functions have a function type, which is the summary of inpout parameter types and output types.
+
+//eg: (Int, Int) -> Int
+func addTwoInts(_ a: Int, _ b: Int) -> Int {
+    return a + b
+}
+
+addTwoInts(3, 4)
+
+
+func multiplyTwoInts(_ a: Int, _ b: Int) -> Int {
+    return a * b
+}
+
+
+//() -> void
+func printHello() {
+    print("Hello World")
+}
+
+
+//Assigning functions to variables
+var arithmeticFunction: (Int, Int) -> Int = addTwoInts
+
+arithmeticFunction(6, 3)
+
+arithmeticFunction = multiplyTwoInts
+
+arithmeticFunction(6, 3)
+
+
+
