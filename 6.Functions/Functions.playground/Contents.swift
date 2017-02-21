@@ -254,4 +254,23 @@ print("ZERO")
 
 
 
+//Notice that the above example requires the compiler to jump around to lots of different functions which can be confusing for the human coder to follor. You can instead rewrite the above using nested functions.
+
+func selectStepFunction(backward: Bool) -> (Int) -> Int {
+    func stepUp(_ input: Int) -> Int { return input + 1 }
+    func stepDown(_ input: Int) -> Int { return input - 1 }
+    return backward ? stepDown : stepUp
+}
+
+var startNum = 4
+let stepFunc = selectStepFunction(backward: startNum > 0)
+
+print("Let count commance")
+while startNum != 0 {
+    print("\(startNum)...")
+    startNum = stepFunc(startNum)
+}
+print("ZERO")
+
+
 
