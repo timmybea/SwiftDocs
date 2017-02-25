@@ -73,5 +73,43 @@ let strings = numbers.map {
 strings
 
 
+//Capturing values
+//A closure can capture constants and variables from the surrounding context in which it is defined. In Swift, the simplest form of a closure that can capture values is a nested function.
+
+//So far we have seen that functions take in parameters, but it is also possible to capture surrounding constants and variables. In this example, the nested function can capture 'runningTotal' and 'amount' even though they are technically outside the function's scope. The compiler can do this because the values are passed by reference into the function.
+
+//After capturing these values, incrementer is returned by makeIncrementer as a closure that increments runningTotal by amount each time it is called.
+
+func makeIncrementer(withIncrement amount: Int) -> () -> Int {
+    var runningTotal = 0
+    func incrementer() -> Int {
+        
+        runningTotal += amount
+        return runningTotal
+    }
+
+    return incrementer
+}
+
+let incrementByTen = makeIncrementer(withIncrement: 10)
+//Notice that this incrementer is a constant that refers specifically to this function that adds ten to its running total each time that it is called. Notice that the the running total does not get released from memory.
+
+incrementByTen()
+incrementByTen()
+incrementByTen()
+
+let incrementBySeven = makeIncrementer(withIncrement: 7)
+incrementBySeven()
+incrementBySeven()
+
+//Now we have created a new constant which is a new reference to a block of memory. If we call the incrementByTen again, we should be able to pick up where we left off.
+
+incrementByTen()
+
+//Capturing by reference ensures that runningTotal and amount do not disappear when the call to makeIncrementer ends, and also ensures that runningTotal is available the next time the incrementer function is called.
+
+
+
+
 
 
