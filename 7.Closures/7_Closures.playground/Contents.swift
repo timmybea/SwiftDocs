@@ -109,6 +109,35 @@ incrementByTen()
 //Capturing by reference ensures that runningTotal and amount do not disappear when the call to makeIncrementer ends, and also ensures that runningTotal is available the next time the incrementer function is called.
 
 
+//CLOSURES ARE REFERENCE TYPES
+//incrementBySeven and incrementByTen are both constants but their closures are reference types. Functions and closures are both reference types.
+//In the example above, it is the choice of closure that incrementByTen refers to that is constant, and not the contents of the closure itself.
+
+//Now we can create a new constant and assign it to refer to the same closure, and continue to increment where we left off...
+
+
+let alsoIncrementByTen = incrementByTen
+
+alsoIncrementByTen()
+
+
+//ESCAPING CLOSURES
+//An escaping clousre is one where the function specifies when the closure will be executed. This makes it a suitable structure to use for networking calls. In this simple example, the closure (completion) is defined by the keyword escaping. Notice that it defines its own input and output parameters. The function specifies when the completion executes by calling completion(). At that point, any input parameter required by the completion is passed in.
+
+//Definition
+func sayHelloto(name: String, completion: @escaping(String) -> Void) -> Int {
+    let greeting = "Hello, \(name)"
+    completion(greeting)
+    return 5
+}
+
+//call
+let number = sayHelloto(name: "Tim") { (greeting) in
+    let newGreeting = greeting.uppercased()
+}
+number
+
+
 
 
 
