@@ -5,38 +5,54 @@ import UIKit
 
 //Here is a function that requires two int parameters and then a mathematical function. You could pass in a function, but you could also pass in a closure. A function is essentially a named closure
 
-func someMathFunction(_ a: Int, _ b: Int, function: (Int, Int) -> Int) -> Int {
-    return function(a, b)
+func someMathFunction(_ a: Int, _ b: Int, closureFunction: (Int, Int) -> Int) -> Int {
+    return closureFunction(a, b)
 }
 
-//Closure syntax (basic)
-//{ (parameters) -> return type in
-//    statements
-//}
-
-var result = someMathFunction(3, 7, function: { (a, b) in return a * b })
+var result = someMathFunction(3, 7, closureFunction: { (a, b) in return a * b })
 result
 
 //It can also be simplified to:
 
-result = someMathFunction(6, 6, function: { $0 * $1 })
+result = someMathFunction(6, 6, closureFunction: { $0 + $1 })
 result
 
-//
 
-let names = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
 
-func backward(_ s1: String, _ s2: String) -> Bool {
-    return s1 > s2
+
+
+
+
+
+//NONESCAPING CLOSURE
+//This function has an int input parameter and then a closure which has an int input and an int return.
+
+func someFunction(int: Int, closure: (Int) -> Int ) {
+    closure(int * int)
 }
 
-var reversedOrder = names.sorted(by: backward)
+//inside 'someFunction' 2 is squared, then the result is passed into the closure. Once in the closure, the int has to be set to a variable (inputs to closures are always constants). Once inside the closure, the new value is squared again.
+
+let sixteen = someFunction(int: 2) { (x) -> Int in
+    var y = x
+    return y * y
+}
+
+
+
+
+
+
+
+
 
 
 //inline closure expression:
 //Closures are like functions... notice that the input/output parameters are expressed in the same way except that they are inside the curly braces. Notice also that the word 'in' is used to introduce the 'body' of the closure.
 
-reversedOrder = names.sorted(by: { (s1: String, s2: String) -> Bool in
+let names = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
+
+var reversedOrder = names.sorted(by: { (s1: String, s2: String) -> Bool in
     return s1 < s2
 })
 
@@ -88,7 +104,7 @@ let strings = numbers.map {
 strings
 
 
-//Capturing values
+//CAPTURING VALUES
 //A closure can capture constants and variables from the surrounding context in which it is defined. In Swift, the simplest form of a closure that can capture values is a nested function.
 
 //So far we have seen that functions take in parameters, but it is also possible to capture surrounding constants and variables. In this example, the nested function can capture 'runningTotal' and 'amount' even though they are technically outside the function's scope. The compiler can do this because the values are passed by reference into the function.
@@ -203,6 +219,46 @@ let handler = completionHandlers.first
 handler?()
 someClassInstance.x
 
+//Autoclosures
+
+var customersInLine = ["Anna", "Edward", "Euripides", "Francis", "Hank"]
+
+customersInLine.count
+
+//This constant now refers to the remove function. Note that it has not executed yet and when it is executed, it will return the element at the index.
+let serveNextCustomer = { customersInLine.remove(at: 0) }
+
+customersInLine.count
+
+print("We are now serving \(serveNextCustomer())")
+customersInLine.count
+print("We are now serving \(serveNextCustomer())")
+customersInLine.count
+print("We are now serving \(serveNextCustomer())")
+customersInLine.count
+
+
+//You can do something very similar by passing the (explicit) closure into a function.
+
+var anotherQueue = ["Anna", "Edward", "Euripides", "Francis", "Hank"]
+
+func serve(customer customerProvider: () -> String) -> String {
+    return "Now serving \(customerProvider())"
+}
+
+anotherQueue.count
+
+serve(customer: { anotherQueue.remove(at: 0) })
+
+anotherQueue.count
+
+//Notice that when the autoclosure keyword is used the { } are no longer necessary. This is essentially the same as the above example.
+
+func newServe(customer customerProvider: @autoclosure () -> String) -> String {
+    return "Now serving \(customerProvider())"
+}
+
+newServe(customer: anotherQueue.remove(at: 0))
 
 
 
@@ -211,11 +267,28 @@ someClassInstance.x
 
 
 
+//Now you can combine the autoclosure with the escaping keyword. In this example we will store two closures; one that takes the first item in the queue and the other takes the last.
+//After the closures have been
 
+anotherQueue
 
+var serveClosures = [() -> String]()
 
+func createNewService(completionHandler: @escaping @autoclosure () -> String) {
+    serveClosures.append(completionHandler)
+}
 
+createNewService(completionHandler: anotherQueue.removeFirst())
+createNewService(completionHandler: anotherQueue.removeLast())
 
+//Notice that the closures have not been executed but have been added to the serveClosures array. Notice as well that the autoclosure keyword means that the closure does not require {}
 
+serveClosures.count
+anotherQueue
 
+//now we can execute the closures. This time I will do it directly from the array
 
+serveClosures[1]()
+serveClosures[0]()
+
+anotherQueue.count
