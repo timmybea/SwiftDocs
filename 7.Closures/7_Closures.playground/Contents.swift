@@ -2,6 +2,28 @@
 
 import UIKit
 
+
+//Here is a function that requires two int parameters and then a mathematical function. You could pass in a function, but you could also pass in a closure. A function is essentially a named closure
+
+func someMathFunction(_ a: Int, _ b: Int, function: (Int, Int) -> Int) -> Int {
+    return function(a, b)
+}
+
+//Closure syntax (basic)
+//{ (parameters) -> return type in
+//    statements
+//}
+
+var result = someMathFunction(3, 7, function: { (a, b) in return a * b })
+result
+
+//It can also be simplified to:
+
+result = someMathFunction(6, 6, function: { $0 * $1 })
+result
+
+//
+
 let names = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
 
 func backward(_ s1: String, _ s2: String) -> Bool {
@@ -9,13 +31,6 @@ func backward(_ s1: String, _ s2: String) -> Bool {
 }
 
 var reversedOrder = names.sorted(by: backward)
-
-
-
-//Closure syntax (basic)
-//{ (parameters) -> return type in
-//    statements
-//}
 
 
 //inline closure expression:
@@ -123,6 +138,8 @@ alsoIncrementByTen()
 
 //ESCAPING CLOSURES
 //An escaping clousre is one where the function specifies when the closure will be executed. This makes it a suitable structure to use for networking calls. In this simple example, the closure (completion) is defined by the keyword escaping. Notice that it defines its own input and output parameters. The function specifies when the completion executes by calling completion(). At that point, any input parameter required by the completion is passed in.
+//Notice that the completion is an input parameter. This example has two input parameters and an Int output.
+
 
 //Definition
 func sayHelloto(name: String, completion: @escaping(String) -> Void) -> Int {
@@ -136,6 +153,66 @@ let number = sayHelloto(name: "Tim") { (greeting) in
     let newGreeting = greeting.uppercased()
 }
 number
+
+
+
+
+//The following is an example of the differences between an eescaping and non-escaping closure. Notice that an escaping closure can be stored outside of the function within which it was created, and then executed at a later time.
+
+
+//this array will store the escaping closure
+var completionHandlers = [()-> Void]()
+
+//Here are two functions, one with an escaping closure that is added to the external array and the other is executed within the function.
+
+func someFunctionWithEscapingClosure(completionHandler: @escaping () -> Void) {
+    completionHandlers.append(completionHandler)
+}
+
+func someFunctionWithNonescapingClosure(closure: () -> Void) {
+    closure()
+}
+
+
+class SomeClass {
+    
+    var x = 10
+    
+    func doSomething() {
+        //notice that the escaping closure needs to hold reference to the variable and so it requires the self keyword.
+        someFunctionWithEscapingClosure { self.x = 100 }
+        someFunctionWithNonescapingClosure { x = 200 }
+    }
+}
+
+let someClassInstance = SomeClass()
+
+//when the class is instantiated, the value of x is 10
+someClassInstance.x
+
+//when the doSomething function is called the nonescaping closure executes changing the value of x to 200 and the escaping closure is passed into the completionHandler array.
+someClassInstance.doSomething()
+
+completionHandlers.count
+
+someClassInstance.x
+
+//later, we can pull the escaping closure out of the array and execute it.
+
+let handler = completionHandlers.first
+handler?()
+someClassInstance.x
+
+
+
+
+
+
+
+
+
+
+
 
 
 
