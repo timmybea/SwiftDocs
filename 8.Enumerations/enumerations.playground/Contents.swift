@@ -89,11 +89,13 @@ planet.rawValue
 
 
 //This rawValue initializer is a 'failable initializer' that returns an optional enumeration case.
+var evaluationStatement: String!
 
 if let possiblePlanet = planetsInOutSolarSystem(rawValue: 10) {
-    print("The planet at position \(possiblePlanet.rawValue) is \(possiblePlanet)")
+
+    evaluationStatement = "The planet at position \(possiblePlanet.rawValue) is \(possiblePlanet)"
 } else {
-    print("There is no planet at this position")
+    evaluationStatement = "There is no planet at this position"
 }
 
 //you can also return the data type as a string for free
