@@ -117,8 +117,128 @@ rectangle.center.x
 //    origin.y = newValue.y - (size.height / 2)
 //}
 
+//Read only computed properties
+//This is the name given to a computed property that has a getter but no setter.
+
+struct Cuboid {
+    
+    var height = 0.0, width = 0.0 , depth = 0.0
+    var volume: Double {
+        return height * width * depth
+    }
+}
+
+let newCuboid = Cuboid(height: 3, width: 6, depth: 9)
+newCuboid.volume
+
+//This will give an error...
+//newCuboid.volume = 6
 
 
+//Property Observers
+//willSet - you have access to the current value and the newValue
+//didSet = you have access to the current value and the oldValue
+
+class StepCounter {
+    var totalSteps: Int = 0 {
+        willSet(newTotalSteps) {  //default is newValue
+            print("About to change totalSteps from \(totalSteps) to \(newTotalSteps)")
+        }
+        didSet {
+            if totalSteps > oldValue  {
+                print("Added \(totalSteps - oldValue) steps")
+            }
+        }
+    }
+}
+let stepCounter = StepCounter()
+stepCounter.totalSteps = 200
+// About to set totalSteps to 200
+// Added 200 steps
+stepCounter.totalSteps = 360
+// About to set totalSteps to 360
+// Added 160 steps
+stepCounter.totalSteps = 896
+// About to set totalSteps to 896
+// Added 536 steps
+
+
+//Type Properties
+//These are properties (variables or constants) that belong to a type (eg: class, struct) as opposed to an instance of the class. They are the equivalent of a 'static' in C.
+//Because they are not part of an instance they require a value, as they will not be initialized.
+//They are lazy meaning they will only be created once upon the first time they are accessed and they are accessed by all instances of the type.
+
+
+//Notice that we use the static key word for stored and computed type properties across all types, EXCEPT when we want a subclass to be able to override a computed property. In this case we use the 'class' keyword.
+
+struct SomeStructure {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 1
+    }
+}
+enum SomeEnumeration {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 6
+    }
+}
+class SomeClass {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 27
+    }
+    class var overrideableComputedTypeProperty: Int {
+        return 107
+    }
+}
+
+
+//Notice that there is no initialization of these types...
+
+SomeStructure.storedTypeProperty
+// Prints "Some value."
+SomeStructure.storedTypeProperty = "Another value."
+// Prints "Another value."
+SomeEnumeration.computedTypeProperty
+// Prints "6"
+SomeClass.computedTypeProperty
+// Prints "27"
+
+
+
+//Example: Audio channel modelling using type properties.
+
+//This struct has two type properties. The maximum level for each channels will always be 10. The maximuj level for all channels will be set by the instance of the channel with the highest level. Even though one instance will set the maxInput... that value will then be available to all instances of this struct.
+
+struct AudioChannel {
+    static let thresholdLevel = 10
+    static var maxInputLevelForAllChannels = 0
+    var currentLevel: Int = 0 {
+        didSet {
+            if currentLevel > AudioChannel.thresholdLevel {
+                // cap the new audio level to the threshold level
+                currentLevel = AudioChannel.thresholdLevel
+            }
+            if currentLevel > AudioChannel.maxInputLevelForAllChannels {
+                // store this as the new overall maximum input level
+                AudioChannel.maxInputLevelForAllChannels = currentLevel
+            }
+        }
+    }
+}
+
+
+var leftChannel = AudioChannel()
+var rightChannel = AudioChannel()
+
+leftChannel.currentLevel = 7
+
+AudioChannel.maxInputLevelForAllChannels
+
+rightChannel.currentLevel = 11
+
+AudioChannel.maxInputLevelForAllChannels
 
 
 
