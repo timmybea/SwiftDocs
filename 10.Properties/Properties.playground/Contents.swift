@@ -241,6 +241,44 @@ rightChannel.currentLevel = 11
 AudioChannel.maxInputLevelForAllChannels
 
 
+//An experiment to get and set height and width and maintain screen aspect ratio
+
+struct ScreenSize {
+    
+    var width: CGFloat {
+        set {
+            height =  newValue * 0.5625
+        } get {
+            return height * 1.7777
+        }
+    }
+    
+    var height: CGFloat = 100.0
+        
+}
+
+class Screen {
+    
+    var screenSize: ScreenSize
+    
+    init() {
+        self.screenSize = ScreenSize()
+    }
+}
+
+
+var newScreen = Screen()
+newScreen.screenSize.height
+newScreen.screenSize.width
+
+newScreen.screenSize.width = 200
+newScreen.screenSize.width
+newScreen.screenSize.height
+
+newScreen.screenSize.height = 50
+newScreen.screenSize.height
+newScreen.screenSize.width
+
 
 
 
